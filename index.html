@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>CDG</title>
-	<meta name="description" content="CDG by Comme des Garçons.">
+	<meta name="description" content="LaveRekoy">
 	<link rel="stylesheet" type="text/css" href="css/style2.css">
 	<script src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
 	<script src="./js/jquery-1.9.1.js"></script>
@@ -12,8 +12,7 @@
 	<script src="./js/d3.min2.js"></script>
 	<script src="./js/matter.min.js"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122641486-1"></script>
-	<script>
+
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -26,11 +25,11 @@
 
 <div style="position:absolute;top:-99999px;left:-9999px">
 	<h1>CDG</h1>
-	<p>CDG by Comme des Garçons.</p>
+	<p>LaveRekoy</p>
 </div>
 
 <div id='cdg_logo'>
-	<img src="./img/logo@3x.png" alt="Comme des Garçons" id='a1v2_logo' class="a1v2_logo_large">
+	<img src="./img/logo@3x.png" alt="LaveRekoy" id='a1v2_logo' class="a1v2_logo_large">
 </div>
 
 <div id='a_view'>
@@ -39,210 +38,6 @@
 <div id='world_view'>
 </div>
 
-<script>
 
-	var geoip = new CDGGeoIp();
-    var targetUrl = 'https://www.cdgcdgcdg.com/location/';
-
-    geoip.get_users_preferred_website(function(website){
-        if (website !== false) {
-            targetUrl = website.url;
-        }
-	});
-
-    $(function()
-    {
-        if (Cookies.get('landing_bypass_1218')) {
-            $('body').on('click',function()
-            {
-                document.location = targetUrl;
-            });
-        }
-
-        $('#a1v2_logo').hide();
-
-        var w = $(window).width();
-        var h = $(window).height();
-
-        // Engine生成
-        // module aliases
-        var Engine = Matter.Engine,
-            Render = Matter.Render,
-            World = Matter.World,
-            Bodies = Matter.Bodies;
-
-        // create an engine
-        var engine = Engine.create();
-
-        // create a renderer
-        var render = Render.create({
-            element: document.body,
-            engine: engine,
-            options: {
-                width: w,  //ステージの横幅
-                height: h,  //ステージの高さ
-                background: '#FFFFFF',  //ステージの背景色
-                wireframes: false  //ワイヤーフレームモードをオフ
-            }
-        });
-
-        var bodies = [];
-
-		/*
-		 for(var i =0; i < 10 ; i ++)
-		 {
-
-		 }*/
-
-        var ground = Bodies.rectangle(w/2, h, w, 20, {
-            isStatic: true,
-            render: {fillStyle: '#FFF',strokeStyle: '#FFF'}
-        });
-
-        bodies.push(ground);
-
-
-        var wall_left = Bodies.rectangle(-10, h/2, 20, h, {
-            isStatic: true,
-            render: {fillStyle: '#FFF',strokeStyle: '#FFF'}
-        });
-
-        bodies.push( wall_left);
-
-
-        var wall_right = Bodies.rectangle(-10, h/2, 20, h, {
-            isStatic: true,
-            render: {fillStyle: '#FFF',strokeStyle: '#FFF'}
-        });
-
-        bodies.push( wall_left);
-
-        // add all of the bodies to the world
-        World.add(engine.world,bodies);
-
-        // run the engine
-        Engine.run(engine);
-
-        // run the renderer
-        Render.run(render);
-
-        Math.seed = 6;
-        var genLogo = function()
-        {
-
-            var x = Math.random() * (w - 60) + 60;
-            var y = -(Math.random() * (300)) - 200;
-
-            // create two boxes and a ground
-            //var box = Bodies.rectangle(x, -80, 100, 80,
-            var box = Bodies.rectangle(x, y, 120, 120,
-                {
-                    density: 0.4, //8質量
-                    frictionAir: 0.03, // 空気抵抗
-                    restitution: 0.2, // 弾力,
-                    friction: 0.01,// 摩擦
-                    //angularSpeed: 0.8,
-                    // angularSpeed:1.0,
-                    angle: Math.PI * (-0.24 + 0.48 * Math.random()) ,
-
-                    timeScale:0.8,
-                    render: {
-                        sprite: {
-                            texture: './img/logo@25x.png',
-                        }
-                    }
-                });
-
-            World.add(engine.world,box);
-            //bodies.push(box);
-        };
-
-        $('#a_view').hide();
-
-        var cnt =0;
-        var nextTime = 400;
-        var genLogoLoop = function()
-        {
-            // console.log('LogoLoop');
-
-            cnt++;
-
-
-            if(cnt == 15)
-            {
-                setTimeout(function()
-                {
-
-
-                    //$('#a1v2_logo').fadeIn(600);
-                    //displayWallPaper();
-
-
-                },3500);
-            }
-
-            if(cnt > 15)
-            {
-                Matter.Composite.remove(engine.world, ground);
-                $('#world_view').remove();
-
-                setTimeout(function()
-                {
-                    Cookies.set('landing_bypass_1218', 'true', {expires: 28});
-                    $('#a1v2_logo').fadeIn(600);
-
-                    $('body').on('click',function()
-                    {
-                        $('#a1v2_logo').fadeOut(300).queue(function() {
-                            document.location = targetUrl
-                        });
-                    });
-                },3400);
-
-                return;
-            }
-
-
-            genLogo();
-
-            setTimeout(function()
-            {
-                genLogoLoop();
-            },nextTime);
-        };
-
-        genLogoLoop();
-
-        var showCover = function()
-        {
-
-            $('#a_view').show(160);
-            $('#a_view').on('click',function()
-            {
-                document.location = targetUrl;
-            });
-
-            var $logos = [];
-            var window_w =	$(window).width();
-            for(var y =0; y < 14; y++)
-            {
-                for(var x =0; x < 10; x++)
-                {
-                    var $logo = $('<img src="./svg/logo.svg" class="cdg_logo">');
-                    //	$logo.width(252);
-                    //	$logo.height(66);
-
-                    var top_y = 0 + 80*y -50;
-                    var left_x = 0 + 260*x;
-                    $logo.css({top:top_y, left:left_x });
-
-
-                    $('#a_view').append($logo);
-                    $logos.push($logo);
-                }
-            }
-        };
-    });
-</script>
 </body>
 </html>
